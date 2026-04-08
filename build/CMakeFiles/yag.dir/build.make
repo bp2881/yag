@@ -156,10 +156,24 @@ CMakeFiles/yag.dir/core/staging.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/yag.dir/core/staging.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pranav/Downloads/coding/projects/yag/core/staging.cpp -o CMakeFiles/yag.dir/core/staging.cpp.s
 
+CMakeFiles/yag.dir/core/scp_transport.cpp.o: CMakeFiles/yag.dir/flags.make
+CMakeFiles/yag.dir/core/scp_transport.cpp.o: /home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp
+CMakeFiles/yag.dir/core/scp_transport.cpp.o: CMakeFiles/yag.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/yag.dir/core/scp_transport.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/yag.dir/core/scp_transport.cpp.o -MF CMakeFiles/yag.dir/core/scp_transport.cpp.o.d -o CMakeFiles/yag.dir/core/scp_transport.cpp.o -c /home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp
+
+CMakeFiles/yag.dir/core/scp_transport.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/yag.dir/core/scp_transport.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp > CMakeFiles/yag.dir/core/scp_transport.cpp.i
+
+CMakeFiles/yag.dir/core/scp_transport.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/yag.dir/core/scp_transport.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp -o CMakeFiles/yag.dir/core/scp_transport.cpp.s
+
 CMakeFiles/yag.dir/utils/file_utils.cpp.o: CMakeFiles/yag.dir/flags.make
 CMakeFiles/yag.dir/utils/file_utils.cpp.o: /home/pranav/Downloads/coding/projects/yag/utils/file_utils.cpp
 CMakeFiles/yag.dir/utils/file_utils.cpp.o: CMakeFiles/yag.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/yag.dir/utils/file_utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/yag.dir/utils/file_utils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/yag.dir/utils/file_utils.cpp.o -MF CMakeFiles/yag.dir/utils/file_utils.cpp.o.d -o CMakeFiles/yag.dir/utils/file_utils.cpp.o -c /home/pranav/Downloads/coding/projects/yag/utils/file_utils.cpp
 
 CMakeFiles/yag.dir/utils/file_utils.cpp.i: cmake_force
@@ -173,7 +187,7 @@ CMakeFiles/yag.dir/utils/file_utils.cpp.s: cmake_force
 CMakeFiles/yag.dir/utils/hash.cpp.o: CMakeFiles/yag.dir/flags.make
 CMakeFiles/yag.dir/utils/hash.cpp.o: /home/pranav/Downloads/coding/projects/yag/utils/hash.cpp
 CMakeFiles/yag.dir/utils/hash.cpp.o: CMakeFiles/yag.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/yag.dir/utils/hash.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/yag.dir/utils/hash.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/yag.dir/utils/hash.cpp.o -MF CMakeFiles/yag.dir/utils/hash.cpp.o.d -o CMakeFiles/yag.dir/utils/hash.cpp.o -c /home/pranav/Downloads/coding/projects/yag/utils/hash.cpp
 
 CMakeFiles/yag.dir/utils/hash.cpp.i: cmake_force
@@ -192,6 +206,7 @@ yag_OBJECTS = \
 "CMakeFiles/yag.dir/core/branch.cpp.o" \
 "CMakeFiles/yag.dir/core/sync.cpp.o" \
 "CMakeFiles/yag.dir/core/staging.cpp.o" \
+"CMakeFiles/yag.dir/core/scp_transport.cpp.o" \
 "CMakeFiles/yag.dir/utils/file_utils.cpp.o" \
 "CMakeFiles/yag.dir/utils/hash.cpp.o"
 
@@ -204,12 +219,13 @@ yag: CMakeFiles/yag.dir/core/commit.cpp.o
 yag: CMakeFiles/yag.dir/core/branch.cpp.o
 yag: CMakeFiles/yag.dir/core/sync.cpp.o
 yag: CMakeFiles/yag.dir/core/staging.cpp.o
+yag: CMakeFiles/yag.dir/core/scp_transport.cpp.o
 yag: CMakeFiles/yag.dir/utils/file_utils.cpp.o
 yag: CMakeFiles/yag.dir/utils/hash.cpp.o
 yag: CMakeFiles/yag.dir/build.make
 yag: CMakeFiles/yag.dir/compiler_depend.ts
 yag: CMakeFiles/yag.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable yag"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable yag"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/yag.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

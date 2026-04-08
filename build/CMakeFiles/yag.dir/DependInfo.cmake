@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/pranav/Downloads/coding/projects/yag/core/branch.cpp" "CMakeFiles/yag.dir/core/branch.cpp.o" "gcc" "CMakeFiles/yag.dir/core/branch.cpp.o.d"
   "/home/pranav/Downloads/coding/projects/yag/core/commit.cpp" "CMakeFiles/yag.dir/core/commit.cpp.o" "gcc" "CMakeFiles/yag.dir/core/commit.cpp.o.d"
   "/home/pranav/Downloads/coding/projects/yag/core/repo.cpp" "CMakeFiles/yag.dir/core/repo.cpp.o" "gcc" "CMakeFiles/yag.dir/core/repo.cpp.o.d"
+  "/home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp" "CMakeFiles/yag.dir/core/scp_transport.cpp.o" "gcc" "CMakeFiles/yag.dir/core/scp_transport.cpp.o.d"
   "/home/pranav/Downloads/coding/projects/yag/core/staging.cpp" "CMakeFiles/yag.dir/core/staging.cpp.o" "gcc" "CMakeFiles/yag.dir/core/staging.cpp.o.d"
   "/home/pranav/Downloads/coding/projects/yag/core/sync.cpp" "CMakeFiles/yag.dir/core/sync.cpp.o" "gcc" "CMakeFiles/yag.dir/core/sync.cpp.o.d"
   "/home/pranav/Downloads/coding/projects/yag/utils/file_utils.cpp" "CMakeFiles/yag.dir/utils/file_utils.cpp.o" "gcc" "CMakeFiles/yag.dir/utils/file_utils.cpp.o.d"

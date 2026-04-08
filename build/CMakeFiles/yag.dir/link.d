@@ -8,6 +8,7 @@ yag: \
   CMakeFiles/yag.dir/core/branch.cpp.o \
   CMakeFiles/yag.dir/core/sync.cpp.o \
   CMakeFiles/yag.dir/core/staging.cpp.o \
+  CMakeFiles/yag.dir/core/scp_transport.cpp.o \
   CMakeFiles/yag.dir/utils/file_utils.cpp.o \
   CMakeFiles/yag.dir/utils/hash.cpp.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so \
@@ -55,6 +56,8 @@ CMakeFiles/yag.dir/core/branch.cpp.o:
 CMakeFiles/yag.dir/core/sync.cpp.o:
 
 CMakeFiles/yag.dir/core/staging.cpp.o:
+
+CMakeFiles/yag.dir/core/scp_transport.cpp.o:
 
 CMakeFiles/yag.dir/utils/file_utils.cpp.o:
 

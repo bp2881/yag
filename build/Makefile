@@ -225,6 +225,30 @@ core/repo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/repo.cpp.s
 .PHONY : core/repo.cpp.s
 
+core/scp_transport.o: core/scp_transport.cpp.o
+.PHONY : core/scp_transport.o
+
+# target to build an object file
+core/scp_transport.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/scp_transport.cpp.o
+.PHONY : core/scp_transport.cpp.o
+
+core/scp_transport.i: core/scp_transport.cpp.i
+.PHONY : core/scp_transport.i
+
+# target to preprocess a source file
+core/scp_transport.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/scp_transport.cpp.i
+.PHONY : core/scp_transport.cpp.i
+
+core/scp_transport.s: core/scp_transport.cpp.s
+.PHONY : core/scp_transport.s
+
+# target to generate assembly for a file
+core/scp_transport.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/scp_transport.cpp.s
+.PHONY : core/scp_transport.cpp.s
+
 core/staging.o: core/staging.cpp.o
 .PHONY : core/staging.o
 
@@ -342,6 +366,9 @@ help:
 	@echo "... core/repo.o"
 	@echo "... core/repo.i"
 	@echo "... core/repo.s"
+	@echo "... core/scp_transport.o"
+	@echo "... core/scp_transport.i"
+	@echo "... core/scp_transport.s"
 	@echo "... core/staging.o"
 	@echo "... core/staging.i"
 	@echo "... core/staging.s"

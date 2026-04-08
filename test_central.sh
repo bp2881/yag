@@ -1,7 +1,9 @@
 #!/bin/bash
 # =============================================================================
-# YAG Centralized Sync Test Script
-# Simulates two users sharing a project through ~/.yag-central/
+# YAG Centralized Sync Test Script (SSH/SCP Edition)
+#
+# Tests push/pull between two local directories using SSH to localhost.
+# Requires: SSH access to yourself (ssh localhost) with key-based auth.
 #
 # Usage:
 #   ./test_central.sh [path-to-yag-binary]
@@ -16,6 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 USER_A="$SCRIPT_DIR/_test_user_a"
 USER_B="$SCRIPT_DIR/_test_user_b"
 PROJECT="test_sync_$$"
+REMOTE_SPEC="$USER@localhost"
 
 # Colors
 GREEN='\033[0;32m'
@@ -29,36 +32,64 @@ section() { echo -e "\n${CYAN}=== $1 ===${NC}"; }
 
 # Cleanup on exit
 cleanup() {
-    rm -rf "$USER_A" "$USER_B" "$HOME/.yag-central/projects/$PROJECT" 2>/dev/null
+    rm -rf "$USER_A" "$USER_B" 2>/dev/null
+    # Clean up central repo on remote (which is localhost)
+    ssh localhost "rm -rf ~/yag-central/projects/$PROJECT" 2>/dev/null || true
 }
 trap cleanup EXIT
 
 cleanup  # ensure clean start
 
 # ------------------------------------------------------------------
-section "User A: init + add + commit + push"
+section "Prerequisites: SSH to localhost"
+# ------------------------------------------------------------------
+ssh -o BatchMode=yes -o ConnectTimeout=5 localhost "echo ok" > /dev/null 2>&1 \
+    || fail "Cannot SSH to localhost. Set up key-based auth first:\n  ssh-keygen && ssh-copy-id localhost"
+pass "SSH to localhost works"
+
+# ------------------------------------------------------------------
+section "User A: init + remote set + add + commit + push"
 # ------------------------------------------------------------------
 mkdir -p "$USER_A" && cd "$USER_A"
 $YAG init "$PROJECT"
+$YAG remote set "$REMOTE_SPEC"
 echo "hello world" > file1.txt
 echo "int main() {}" > main.cpp
 $YAG add .
 $YAG commit "A: initial commit"
 $YAG push
-pass "User A pushed initial commit"
+pass "User A pushed initial commit via SCP"
+
+# Verify files arrived on remote
+ssh localhost "test -d ~/yag-central/projects/$PROJECT/objects" \
+    || fail "Remote objects/ dir not created"
+ssh localhost "test -d ~/yag-central/projects/$PROJECT/commits" \
+    || fail "Remote commits/ dir not created"
+ssh localhost "test -f ~/yag-central/projects/$PROJECT/branches/main" \
+    || fail "Remote branch pointer not created"
+pass "Remote directory structure verified"
 
 # ------------------------------------------------------------------
-section "User B: init + pull (receives A's files)"
+section "User A: idempotent push (should be zero-transfer)"
+# ------------------------------------------------------------------
+cd "$USER_A"
+OUTPUT=$($YAG push 2>&1)
+echo "$OUTPUT" | grep -q "Already up to date" || fail "Idempotent push not detected"
+pass "Push is idempotent — 'Already up to date'"
+
+# ------------------------------------------------------------------
+section "User B: init + remote set + pull (receives A's files)"
 # ------------------------------------------------------------------
 mkdir -p "$USER_B" && cd "$USER_B"
 $YAG init "$PROJECT"
+$YAG remote set "$REMOTE_SPEC"
 $YAG pull
 
 # Verify files actually arrived
 [[ -f file1.txt ]] || fail "file1.txt missing after pull"
 [[ -f main.cpp ]]  || fail "main.cpp missing after pull"
 [[ "$(cat file1.txt)" == "hello world" ]] || fail "file1.txt content wrong"
-pass "User B pulled and got correct files"
+pass "User B pulled and got correct files via SCP"
 
 # ------------------------------------------------------------------
 section "User B: modify + commit + push"
@@ -68,7 +99,7 @@ echo "modified by B" > file1.txt
 $YAG add file1.txt
 $YAG commit "B: updated file1"
 $YAG push
-pass "User B pushed update"
+pass "User B pushed update via SCP"
 
 # ------------------------------------------------------------------
 section "User A: pull (fast-forward, no conflict)"
@@ -93,6 +124,15 @@ cd "$USER_A"
 OUTPUT=$($YAG commit "should fail" 2>&1) || true
 echo "$OUTPUT" | grep -q "No changes to commit" || fail "Empty commit not blocked"
 pass "Empty commit correctly blocked"
+
+# ------------------------------------------------------------------
+section "Remote show"
+# ------------------------------------------------------------------
+cd "$USER_A"
+OUTPUT=$($YAG remote show 2>&1)
+echo "$OUTPUT" | grep -q "localhost" || fail "Remote show missing host"
+echo "$OUTPUT" | grep -q "$USER" || fail "Remote show missing user"
+pass "yag remote show displays config correctly"
 
 # ------------------------------------------------------------------
 section "Conflict detection"
@@ -128,5 +168,5 @@ pass "Log shows complete history"
 
 echo ""
 echo -e "${GREEN}============================================${NC}"
-echo -e "${GREEN}  ALL TESTS PASSED${NC}"
+echo -e "${GREEN}  ALL TESTS PASSED (SSH/SCP)${NC}"
 echo -e "${GREEN}============================================${NC}"

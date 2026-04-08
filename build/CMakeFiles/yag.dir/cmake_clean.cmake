@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/yag.dir/core/commit.cpp.o.d"
   "CMakeFiles/yag.dir/core/repo.cpp.o"
   "CMakeFiles/yag.dir/core/repo.cpp.o.d"
+  "CMakeFiles/yag.dir/core/scp_transport.cpp.o"
+  "CMakeFiles/yag.dir/core/scp_transport.cpp.o.d"
   "CMakeFiles/yag.dir/core/staging.cpp.o"
   "CMakeFiles/yag.dir/core/staging.cpp.o.d"
   "CMakeFiles/yag.dir/core/sync.cpp.o"

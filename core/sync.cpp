@@ -2,6 +2,7 @@
 #include "core/repo.h"
 #include "core/commit.h"
 #include "core/staging.h"
+#include "core/scp_transport.h"
 #include "utils/file_utils.h"
 
 #include <iostream>
@@ -13,35 +14,13 @@ namespace fs = std::filesystem;
 namespace yag::core {
 
 // ---------------------------------------------------------------------------
-// Resolve central repo path using project_name from .yag/config.
-// Path: ~/.yag-central/projects/<project_name>/
+// Build the remote central repo path for this project.
+// E.g.: ~/yag-central/projects/my_project
 // ---------------------------------------------------------------------------
-static fs::path get_central_path() {
-    const char* home = std::getenv("HOME");
-    if (!home) {
-        throw std::runtime_error("HOME environment variable not set.");
-    }
-
-    // Use config-based project name (NOT folder name)
-    std::string project_name = get_project_name();
-    return fs::path(home) / ".yag-central" / "projects" / project_name;
-}
-
-// ---------------------------------------------------------------------------
-// Copy only files that don't already exist in dst_dir (skip existing).
-// This ensures push/pull only transfers NEW objects and commits.
-// ---------------------------------------------------------------------------
-static void copy_missing(const fs::path& src_dir, const fs::path& dst_dir) {
-    if (!fs::exists(src_dir)) return;
-    fs::create_directories(dst_dir);
-
-    for (const auto& entry : fs::directory_iterator(src_dir)) {
-        if (!entry.is_regular_file()) continue;
-        fs::path dst_file = dst_dir / entry.path().filename();
-        if (!fs::exists(dst_file)) {
-            fs::copy_file(entry.path(), dst_file);
-        }
-    }
+static std::string get_remote_project_path() {
+    std::string base = get_remote_base_path();
+    std::string project = get_project_name();
+    return base + "/" + project;
 }
 
 // ---------------------------------------------------------------------------
@@ -89,85 +68,147 @@ static void restore_from_commit(const fs::path& root, const Commit& c) {
     write_index(c.files);
 }
 
+// ===========================================================================
+//  PUSH — Upload local commits/objects to the central repo via SSH/SCP
+//
+//  Flow:
+//    1. Read remote config (host, user, port, project_name)
+//    2. Compare branch tip commits BEFORE any transfer
+//    3. If identical → "Already up to date", zero transfer
+//    4. Otherwise: ensure remote dirs, batch-upload missing objects + commits,
+//       update remote branch pointer
+// ===========================================================================
+
 bool push() {
     fs::path root = find_yag_root();
-    fs::path yag = root / ".yag";
-    fs::path central = get_central_path();
+    fs::path yag  = root / ".yag";
 
-    std::string branch = get_current_branch();
-    std::string commit_id = utils::read_file(yag / "branches" / branch);
+    // --- Check remote is configured ---
+    if (!has_remote()) {
+        std::cerr << "No remote configured. Use 'yag remote set user@host[:port]'.\n";
+        return false;
+    }
 
-    if (commit_id == "none") {
+    std::string host = get_remote_host();
+    std::string user = get_remote_user();
+    int         port = get_remote_port();
+    std::string remote_project = get_remote_project_path();
+
+    // --- Read local branch tip ---
+    std::string branch       = get_current_branch();
+    std::string local_commit = utils::read_file(yag / "branches" / branch);
+
+    if (local_commit == "none") {
         std::cerr << "Nothing to push (no commits on '" << branch << "').\n";
         return false;
     }
 
-    // Create central directory structure if it doesn't exist yet
-    fs::create_directories(central / "objects");
-    fs::create_directories(central / "commits");
-    fs::create_directories(central / "branches");
+    // --- Step 1: Compare branch tips BEFORE any file transfer ---
+    std::string remote_branch_path = remote_project + "/branches/" + branch;
+    std::string remote_commit = "none";
 
-    // 1. Copy ONLY missing objects (content-addressed, so duplicates are skipped)
-    copy_missing(yag / "objects", central / "objects");
+    if (transport::ssh_file_exists(host, user, port, remote_branch_path)) {
+        remote_commit = transport::ssh_read_file(host, user, port, remote_branch_path);
+    }
 
-    // 2. Copy ONLY missing commits
-    copy_missing(yag / "commits", central / "commits");
+    if (local_commit == remote_commit) {
+        std::cout << "Already up to date.\n";
+        return true;
+    }
 
-    // 3. Update branch pointer in central
-    utils::write_file(central / "branches" / branch, commit_id);
+    // --- Step 2: Ensure remote directory structure exists ---
+    transport::ssh_mkdir(host, user, port, remote_project + "/objects");
+    transport::ssh_mkdir(host, user, port, remote_project + "/commits");
+    transport::ssh_mkdir(host, user, port, remote_project + "/branches");
+
+    // --- Step 3: Upload only missing objects (batch diff + SCP) ---
+    transport::scp_upload_missing(
+        yag / "objects", host, user, port, remote_project + "/objects");
+
+    // --- Step 4: Upload only missing commits ---
+    transport::scp_upload_missing(
+        yag / "commits", host, user, port, remote_project + "/commits");
+
+    // --- Step 5: Update remote branch pointer ---
+    transport::ssh_write_file(
+        host, user, port, remote_branch_path, local_commit);
 
     std::cout << "Pushed to central: " << branch
-              << " → " << commit_id.substr(0, 8) << "\n";
+              << " → " << local_commit.substr(0, 8) << "\n";
     return true;
 }
 
+// ===========================================================================
+//  PULL — Download new commits/objects from the central repo via SSH/SCP
+//
+//  Flow:
+//    1. Read remote config
+//    2. Compare branch tips BEFORE any transfer
+//    3. If identical → "Already up to date", zero transfer
+//    4. Conflict detection: walk remote commit ancestry via SSH
+//    5. Batch-download missing objects + commits
+//    6. Update local branch pointer
+//    7. Restore working directory from pulled commit
+// ===========================================================================
+
 bool pull() {
     fs::path root = find_yag_root();
-    fs::path yag = root / ".yag";
-    fs::path central = get_central_path();
+    fs::path yag  = root / ".yag";
 
-    // Safety: if central repo doesn't exist, nothing to pull
-    if (!fs::exists(central)) {
-        std::cerr << "No central repository found at "
-                  << central.string() << "\n";
+    // --- Check remote is configured ---
+    if (!has_remote()) {
+        std::cerr << "No remote configured. Use 'yag remote set user@host[:port]'.\n";
         return false;
     }
 
-    std::string branch = get_current_branch();
-    fs::path central_branch = central / "branches" / branch;
+    std::string host = get_remote_host();
+    std::string user = get_remote_user();
+    int         port = get_remote_port();
+    std::string remote_project = get_remote_project_path();
 
-    // Safety: branch must exist in central
-    if (!fs::exists(central_branch)) {
+    // --- Read local branch info ---
+    std::string branch   = get_current_branch();
+    std::string local_id = utils::read_file(yag / "branches" / branch);
+
+    // --- Step 1: Check remote branch exists ---
+    std::string remote_branch_path = remote_project + "/branches/" + branch;
+
+    if (!transport::ssh_file_exists(host, user, port, remote_branch_path)) {
         std::cerr << "Branch '" << branch << "' not found in central.\n";
         return false;
     }
 
-    // 1. Copy ONLY missing objects from central
-    copy_missing(central / "objects", yag / "objects");
+    // --- Step 2: Compare branch tips BEFORE any transfer ---
+    std::string central_id = transport::ssh_read_file(
+        host, user, port, remote_branch_path);
 
-    // 2. Copy ONLY missing commits from central
-    copy_missing(central / "commits", yag / "commits");
-
-    // 3. Read both local and central branch pointers
-    std::string central_id = utils::read_file(central_branch);
-    std::string local_id  = utils::read_file(yag / "branches" / branch);
-
-    // Already in sync — nothing to do
     if (local_id == central_id) {
         std::cout << "Already up to date.\n";
         return true;
     }
 
-    // -----------------------------------------------------------------------
-    // 4. Conflict detection
-    //    First check if local is simply behind (fast-forward case):
-    //    Walk the central commit's parent chain. If local_id appears as an
-    //    ancestor → local is just behind, safe to fast-forward.
-    //    Only flag a conflict when local has diverged (local has commits
-    //    that central doesn't know about, AND file contents differ).
-    // -----------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    // Step 3: Conflict detection
+    //   Walk the central commit's parent chain via SSH.
+    //   If local_id appears as an ancestor → safe to fast-forward.
+    //   If not → check file hashes for actual conflicts.
+    // -------------------------------------------------------------------
     if (local_id != "none" && central_id != "none") {
-        // Check if local_id is an ancestor of central_id (fast-forward)
+        // First, download the commits we need for ancestry walk
+        // (we need them locally to read parent chains)
+        transport::scp_download_missing(
+            host, user, port,
+            remote_project + "/commits",
+            yag / "commits");
+
+        // Also download objects (we'll need them for restore anyway,
+        // and for conflict file-hash comparison)
+        transport::scp_download_missing(
+            host, user, port,
+            remote_project + "/objects",
+            yag / "objects");
+
+        // Walk the central commit's parent chain to check if local is ancestor
         bool is_ancestor = false;
         std::string walk_id = central_id;
         while (walk_id != "none") {
@@ -180,7 +221,7 @@ bool pull() {
         }
 
         if (!is_ancestor) {
-            // Local has diverged — check for actual file conflicts
+            // Local has diverged — compare file hashes for real conflicts
             Commit local_commit   = read_commit(local_id);
             Commit central_commit = read_commit(central_id);
 
@@ -188,7 +229,7 @@ bool pull() {
             auto central_map = file_hash_map(central_commit);
 
             if (local_map != central_map) {
-                // Files differ AND histories have diverged → real conflict
+                // Files differ AND histories diverged → real conflict
                 std::cerr << "Conflict detected. Manual resolution required.\n";
 
                 // Show which files conflict
@@ -206,19 +247,31 @@ bool pull() {
                     }
                 }
 
-                // Objects/commits were already copied for manual inspection,
-                // but we do NOT update the branch pointer or working directory.
+                // Objects/commits were already downloaded for inspection,
+                // but we do NOT update branch pointer or working directory.
                 return false;
             }
-            // Files are identical despite diverged histories — safe to fast-forward
+            // Files identical despite diverged history → safe to fast-forward
         }
-        // If is_ancestor == true, local is simply behind → fast-forward
+        // is_ancestor == true → local is simply behind → fast-forward
+    } else {
+        // Simple case: local has no commits, or remote has no commits on this branch
+        // Download all missing objects and commits
+        transport::scp_download_missing(
+            host, user, port,
+            remote_project + "/commits",
+            yag / "commits");
+
+        transport::scp_download_missing(
+            host, user, port,
+            remote_project + "/objects",
+            yag / "objects");
     }
 
-    // 5. Safe to fast-forward: update local branch pointer
+    // --- Step 4: Update local branch pointer ---
     utils::write_file(yag / "branches" / branch, central_id);
 
-    // 6. Restore working directory and index from the pulled commit
+    // --- Step 5: Restore working directory from the pulled commit ---
     if (central_id != "none") {
         Commit pulled = read_commit(central_id);
         restore_from_commit(root, pulled);

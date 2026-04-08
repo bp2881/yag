@@ -11,6 +11,7 @@ add_executable(yag
     core/branch.cpp
     core/sync.cpp
     core/staging.cpp
+    core/scp_transport.cpp
     utils/file_utils.cpp
     utils/hash.cpp
 )
