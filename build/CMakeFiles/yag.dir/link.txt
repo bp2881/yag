@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -Wl,--dependency-file=CMakeFiles/yag.dir/link.d CMakeFiles/yag.dir/cli/main.cpp.o CMakeFiles/yag.dir/core/repo.cpp.o CMakeFiles/yag.dir/core/commit.cpp.o CMakeFiles/yag.dir/core/branch.cpp.o CMakeFiles/yag.dir/core/sync.cpp.o CMakeFiles/yag.dir/core/staging.cpp.o CMakeFiles/yag.dir/utils/file_utils.cpp.o CMakeFiles/yag.dir/utils/hash.cpp.o -o yag

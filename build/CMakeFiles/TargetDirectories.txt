@@ -1,0 +1,3 @@
+/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles/yag.dir
+/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles/edit_cache.dir
+/home/pranav/Downloads/coding/projects/yag/build/CMakeFiles/rebuild_cache.dir
