@@ -98,6 +98,14 @@ bool push() {
 
   // --- Read local branch tip ---
   std::string branch = get_current_branch();
+
+  // --- Protected branches check ---
+  if (branch == "main" && get_config_value("protect_main") == "true") {
+    std::cerr << "Error: 'main' is a protected branch. Direct push is "
+                 "forbidden.\n";
+    return false;
+  }
+
   std::string local_commit = utils::read_file(yag / "branches" / branch);
 
   if (local_commit == "none") {
@@ -243,6 +251,17 @@ bool pull() {
         for (const auto &[path, hash] : local_map) {
           if (central_map.find(path) == central_map.end()) {
             std::cerr << "  deleted in central: " << path << "\n";
+          }
+        }
+
+        // --- AI Merge Hook ---
+        std::cout << "Attempting AI-assisted merge resolution...\n";
+        for (const auto &[path, hash] : central_map) {
+          auto it = local_map.find(path);
+          if (it != local_map.end() && it->second != hash) {
+            // resolve_conflict_with_ai(path); // Future hook
+            std::cout << "  [AI Placeholder] Analyzed conflict in: " << path
+                      << "\n";
           }
         }
 

@@ -4,6 +4,10 @@
 
 #include "core/branch.h"
 #include "core/commit.h"
+#include "core/diff.h"
+#include "core/doctor.h"
+#include "core/gc.h"
+#include "core/lock.h"
 #include "core/repo.h"
 #include "core/staging.h"
 #include "core/sync.h"
@@ -19,10 +23,18 @@ void print_usage() {
       << "  yag log                              Show commit history\n"
       << "  yag branch [name]                    List or create branches\n"
       << "  yag checkout <name>                  Switch to a branch\n"
+      << "  yag diff                             Show working dir vs index "
+         "diff\n"
+      << "  yag reflog                           Show local HEAD movement history\n"
+      << "  yag doctor                           Check repository health/integrity\n"
       << "  yag push                             Push to central repository "
          "(SSH)\n"
       << "  yag pull                             Pull from central repository "
          "(SSH)\n"
+      << "  yag lock <file>                      Lock a file to prevent pushes\n"
+      << "  yag unlock <file>                    Unlock a file\n"
+      << "  yag locks                            Show all active file locks\n"
+      << "  yag gc                               Clean unreachable objects/commits\n"
       << "  yag remote set <user@host[:port]>    Set/change remote server\n"
       << "  yag remote show                      Show current remote config\n";
 }
@@ -84,6 +96,28 @@ int main(int argc, char *argv[]) {
         return 1;
       }
       yag::core::checkout(argv[2]);
+    } else if (command == "diff") {
+      yag::core::show_diff();
+    } else if (command == "doctor") {
+      yag::core::run_doctor();
+    } else if (command == "gc") {
+      yag::core::run_gc();
+    } else if (command == "reflog") {
+      yag::core::show_reflog();
+    } else if (command == "lock") {
+      if (argc < 3) {
+        std::cerr << "Error: lock requires a file path.\n";
+        return 1;
+      }
+      yag::core::lock_file(argv[2]);
+    } else if (command == "unlock") {
+      if (argc < 3) {
+        std::cerr << "Error: unlock requires a file path.\n";
+        return 1;
+      }
+      yag::core::unlock_file(argv[2]);
+    } else if (command == "locks") {
+      yag::core::show_locks();
     } else if (command == "push") {
       yag::core::push();
     } else if (command == "pull") {

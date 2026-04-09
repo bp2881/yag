@@ -4,9 +4,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <set>
 #include <sstream>
 #include <stdexcept>
+
+#include "utils/hash.h"
 
 // ============================================================================
 // Base64 encoder (self-contained, no external dependency)
@@ -130,6 +133,21 @@ static std::string ssh_prefix(const std::string &host, const std::string &user,
   return oss.str();
 }
 
+static std::string remote_sha256(const std::string &host, const std::string &user,
+                                 int port, const std::string &remote_path) {
+  // Try sha256sum (Linux) or shasum -a 256 (macOS)
+  std::string cmd = ssh_prefix(host, user, port) + " \"sha256sum " +
+                    quote_remote_path(remote_path) + " 2>/dev/null || shasum -a 256 " +
+                    quote_remote_path(remote_path) + "\"";
+  auto [output, exit_code] = exec_command(cmd);
+  if (exit_code != 0) return "";
+  
+  std::istringstream iss(output);
+  std::string hash;
+  iss >> hash;
+  return hash;
+}
+
 // ============================================================================
 // SSH operations
 // ============================================================================
@@ -237,11 +255,22 @@ void scp_upload(const fs::path &local_path, const std::string &host,
   std::string cmd = scp_prefix(port) + " '" + local_path.string() + "'" + " " +
                     user + "@" + host + ":" + quote_remote_path(remote_path);
 
-  auto [output, exit_code] = exec_command(cmd);
-  if (exit_code != 0) {
-    throw std::runtime_error("scp_upload failed (exit " +
-                             std::to_string(exit_code) +
-                             "): " + local_path.string() + " → " + remote_path);
+  int attempts = 3;
+  while (attempts-- > 0) {
+    auto [output, exit_code] = exec_command(cmd);
+    if (exit_code == 0) {
+      // Verification
+      std::string local_hash = utils::hash_file(local_path);
+      std::string remote_hash = remote_sha256(host, user, port, remote_path);
+      
+      if (remote_hash == local_hash) {
+        return; // Success
+      }
+      std::cerr << "Hash mismatch for " << local_path.filename() << ". Retrying...\n";
+    }
+    if (attempts == 0) {
+      throw std::runtime_error("scp_upload failed after 3 attempts: " + local_path.string());
+    }
   }
 }
 
@@ -256,11 +285,22 @@ void scp_download(const std::string &host, const std::string &user, int port,
                     quote_remote_path(remote_path) + " '" +
                     local_path.string() + "'";
 
-  auto [output, exit_code] = exec_command(cmd);
-  if (exit_code != 0) {
-    throw std::runtime_error("scp_download failed (exit " +
-                             std::to_string(exit_code) + "): " + remote_path +
-                             " → " + local_path.string());
+  int attempts = 3;
+  while (attempts-- > 0) {
+    auto [output, exit_code] = exec_command(cmd);
+    if (exit_code == 0) {
+      // Verification
+      std::string local_hash = utils::hash_file(local_path);
+      std::string remote_hash = remote_sha256(host, user, port, remote_path);
+      
+      if (remote_hash == local_hash) {
+        return; // Success
+      }
+      std::cerr << "Hash mismatch for " << remote_path << ". Retrying...\n";
+    }
+    if (attempts == 0) {
+      throw std::runtime_error("scp_download failed after 3 attempts: " + remote_path);
+    }
   }
 }
 

@@ -52,4 +52,15 @@ bool has_remote();
 // Parse and store "user@host[:port]" into config
 void set_remote_spec(const std::string &spec);
 
+// ---------------------------------------------------------------------------
+// Reflog — tracks HEAD movements for recovery
+// ---------------------------------------------------------------------------
+
+// Append an entry to .yag/logs/HEAD
+void write_reflog(const std::string &action, const std::string &old_ref,
+                  const std::string &new_ref);
+
+// Print the reflog
+void show_reflog();
+
 } // namespace yag::core

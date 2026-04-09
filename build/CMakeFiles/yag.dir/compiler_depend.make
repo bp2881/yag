@@ -1004,6 +1004,7 @@ CMakeFiles/yag.dir/core/diff.cpp.o: /home/pranav/Downloads/coding/projects/yag/c
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include/stdint.h
 
 CMakeFiles/yag.dir/core/doctor.cpp.o: /home/pranav/Downloads/coding/projects/yag/core/doctor.cpp \
+  /home/pranav/Downloads/coding/projects/yag/core/commit.h \
   /home/pranav/Downloads/coding/projects/yag/core/doctor.h \
   /home/pranav/Downloads/coding/projects/yag/core/repo.h \
   /home/pranav/Downloads/coding/projects/yag/utils/file_utils.h \
@@ -1098,6 +1099,7 @@ CMakeFiles/yag.dir/core/doctor.cpp.o: /home/pranav/Downloads/coding/projects/yag
   /usr/include/c++/15.2.1/bits/cpp_type_traits.h \
   /usr/include/c++/15.2.1/bits/cxxabi_forced.h \
   /usr/include/c++/15.2.1/bits/cxxabi_init_exception.h \
+  /usr/include/c++/15.2.1/bits/erase_if.h \
   /usr/include/c++/15.2.1/bits/exception.h \
   /usr/include/c++/15.2.1/bits/exception_defines.h \
   /usr/include/c++/15.2.1/bits/exception_ptr.h \
@@ -1124,6 +1126,7 @@ CMakeFiles/yag.dir/core/doctor.cpp.o: /home/pranav/Downloads/coding/projects/yag
   /usr/include/c++/15.2.1/bits/move.h \
   /usr/include/c++/15.2.1/bits/nested_exception.h \
   /usr/include/c++/15.2.1/bits/new_allocator.h \
+  /usr/include/c++/15.2.1/bits/node_handle.h \
   /usr/include/c++/15.2.1/bits/ostream.h \
   /usr/include/c++/15.2.1/bits/ostream.tcc \
   /usr/include/c++/15.2.1/bits/ostream_insert.h \
@@ -1146,7 +1149,10 @@ CMakeFiles/yag.dir/core/doctor.cpp.o: /home/pranav/Downloads/coding/projects/yag
   /usr/include/c++/15.2.1/bits/stl_iterator.h \
   /usr/include/c++/15.2.1/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/15.2.1/bits/stl_iterator_base_types.h \
+  /usr/include/c++/15.2.1/bits/stl_multiset.h \
   /usr/include/c++/15.2.1/bits/stl_pair.h \
+  /usr/include/c++/15.2.1/bits/stl_set.h \
+  /usr/include/c++/15.2.1/bits/stl_tree.h \
   /usr/include/c++/15.2.1/bits/stl_uninitialized.h \
   /usr/include/c++/15.2.1/bits/stl_vector.h \
   /usr/include/c++/15.2.1/bits/streambuf.tcc \
@@ -1194,6 +1200,7 @@ CMakeFiles/yag.dir/core/doctor.cpp.o: /home/pranav/Downloads/coding/projects/yag
   /usr/include/c++/15.2.1/ostream \
   /usr/include/c++/15.2.1/pstl/pstl_config.h \
   /usr/include/c++/15.2.1/ratio \
+  /usr/include/c++/15.2.1/set \
   /usr/include/c++/15.2.1/sstream \
   /usr/include/c++/15.2.1/stdexcept \
   /usr/include/c++/15.2.1/streambuf \
@@ -1253,6 +1260,7 @@ CMakeFiles/yag.dir/core/gc.cpp.o: /home/pranav/Downloads/coding/projects/yag/cor
   /home/pranav/Downloads/coding/projects/yag/core/gc.h \
   /home/pranav/Downloads/coding/projects/yag/core/repo.h \
   /home/pranav/Downloads/coding/projects/yag/core/staging.h \
+  /home/pranav/Downloads/coding/projects/yag/utils/file_utils.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
   /usr/include/asm-generic/errno-base.h \
@@ -1503,7 +1511,6 @@ CMakeFiles/yag.dir/core/lock.cpp.o: /home/pranav/Downloads/coding/projects/yag/c
   /home/pranav/Downloads/coding/projects/yag/core/lock.h \
   /home/pranav/Downloads/coding/projects/yag/core/repo.h \
   /home/pranav/Downloads/coding/projects/yag/utils/file_utils.h \
-  /home/pranav/Downloads/coding/projects/yag/utils/hash.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
   /usr/include/asm-generic/errno-base.h \
@@ -1997,7 +2004,6 @@ CMakeFiles/yag.dir/core/repo.cpp.o: /home/pranav/Downloads/coding/projects/yag/c
 
 CMakeFiles/yag.dir/core/scp_transport.cpp.o: /home/pranav/Downloads/coding/projects/yag/core/scp_transport.cpp \
   /home/pranav/Downloads/coding/projects/yag/core/scp_transport.h \
-  /home/pranav/Downloads/coding/projects/yag/utils/hash.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
   /usr/include/asm-generic/errno-base.h \
@@ -2190,7 +2196,6 @@ CMakeFiles/yag.dir/core/scp_transport.cpp.o: /home/pranav/Downloads/coding/proje
   /usr/include/c++/15.2.1/iomanip \
   /usr/include/c++/15.2.1/ios \
   /usr/include/c++/15.2.1/iosfwd \
-  /usr/include/c++/15.2.1/iostream \
   /usr/include/c++/15.2.1/istream \
   /usr/include/c++/15.2.1/limits \
   /usr/include/c++/15.2.1/locale \
@@ -3292,6 +3297,10 @@ yag: /usr/lib/Scrt1.o \
   CMakeFiles/yag.dir/cli/main.cpp.o \
   CMakeFiles/yag.dir/core/branch.cpp.o \
   CMakeFiles/yag.dir/core/commit.cpp.o \
+  CMakeFiles/yag.dir/core/diff.cpp.o \
+  CMakeFiles/yag.dir/core/doctor.cpp.o \
+  CMakeFiles/yag.dir/core/gc.cpp.o \
+  CMakeFiles/yag.dir/core/lock.cpp.o \
   CMakeFiles/yag.dir/core/repo.cpp.o \
   CMakeFiles/yag.dir/core/scp_transport.cpp.o \
   CMakeFiles/yag.dir/core/staging.cpp.o \
@@ -3309,6 +3318,10 @@ CMakeFiles/yag.dir/core/sync.cpp.o:
 CMakeFiles/yag.dir/core/staging.cpp.o:
 
 CMakeFiles/yag.dir/core/repo.cpp.o:
+
+CMakeFiles/yag.dir/core/lock.cpp.o:
+
+CMakeFiles/yag.dir/core/doctor.cpp.o:
 
 CMakeFiles/yag.dir/core/branch.cpp.o:
 
@@ -3364,13 +3377,13 @@ CMakeFiles/yag.dir/core/branch.cpp.o:
 
 /home/pranav/Downloads/coding/projects/yag/core/repo.cpp:
 
+/home/pranav/Downloads/coding/projects/yag/core/gc.cpp:
+
 /usr/include/c++/15.2.1/set:
 
 /usr/include/c++/15.2.1/bits/stl_set.h:
 
 /usr/include/c++/15.2.1/bits/stl_multiset.h:
-
-/home/pranav/Downloads/coding/projects/yag/core/gc.cpp:
 
 /home/pranav/Downloads/coding/projects/yag/core/doctor.cpp:
 
@@ -3548,6 +3561,8 @@ CMakeFiles/yag.dir/cli/main.cpp.o:
 
 /usr/include/bits/time.h:
 
+CMakeFiles/yag.dir/core/diff.cpp.o:
+
 /usr/include/c++/15.2.1/bits/fs_dir.h:
 
 /usr/include/bits/stdio_lim.h:
@@ -3653,6 +3668,8 @@ CMakeFiles/yag.dir/core/scp_transport.cpp.o:
 /usr/include/c++/15.2.1/bits/locale_facets_nonio.tcc:
 
 /usr/include/bits/select.h:
+
+CMakeFiles/yag.dir/core/gc.cpp.o:
 
 /usr/include/bits/types/__fpos64_t.h:
 

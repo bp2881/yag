@@ -108,6 +108,9 @@ std::string create_commit(const std::string &message) {
   // 8. Update branch pointer to this new commit
   utils::write_file(yag / "branches" / branch, commit_id);
 
+  // 9. Write reflog
+  write_reflog("commit: " + message, parent, commit_id);
+
   std::cout << "[" << branch << " " << commit_id.substr(0, 8) << "] " << message
             << "\n";
   return commit_id;

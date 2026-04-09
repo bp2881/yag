@@ -145,7 +145,13 @@ CMakeFiles/yag.dir/cli/main.cpp.o: \
  /usr/include/c++/15.2.1/bits/basic_ios.tcc \
  /usr/include/c++/15.2.1/bits/ostream.tcc /usr/include/c++/15.2.1/istream \
  /usr/include/c++/15.2.1/bits/istream.tcc \
- /home/pranav/Downloads/coding/projects/yag/core/repo.h \
+ /home/pranav/Downloads/coding/projects/yag/core/branch.h \
+ /usr/include/c++/15.2.1/vector \
+ /usr/include/c++/15.2.1/bits/stl_uninitialized.h \
+ /usr/include/c++/15.2.1/bits/stl_vector.h \
+ /usr/include/c++/15.2.1/bits/stl_bvector.h \
+ /usr/include/c++/15.2.1/bits/vector.tcc \
+ /home/pranav/Downloads/coding/projects/yag/core/commit.h \
  /usr/include/c++/15.2.1/filesystem /usr/include/c++/15.2.1/bits/fs_fwd.h \
  /usr/include/c++/15.2.1/cstdint \
  /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include/stdint.h \
@@ -173,16 +179,10 @@ CMakeFiles/yag.dir/cli/main.cpp.o: \
  /usr/include/c++/15.2.1/ext/aligned_buffer.h \
  /usr/include/c++/15.2.1/bits/fs_dir.h \
  /usr/include/c++/15.2.1/bits/fs_ops.h \
- /home/pranav/Downloads/coding/projects/yag/core/commit.h \
- /usr/include/c++/15.2.1/vector \
- /usr/include/c++/15.2.1/bits/stl_uninitialized.h \
- /usr/include/c++/15.2.1/bits/stl_vector.h \
- /usr/include/c++/15.2.1/bits/stl_bvector.h \
- /usr/include/c++/15.2.1/bits/vector.tcc \
- /home/pranav/Downloads/coding/projects/yag/core/branch.h \
- /home/pranav/Downloads/coding/projects/yag/core/sync.h \
- /home/pranav/Downloads/coding/projects/yag/core/staging.h \
  /home/pranav/Downloads/coding/projects/yag/core/diff.h \
  /home/pranav/Downloads/coding/projects/yag/core/doctor.h \
+ /home/pranav/Downloads/coding/projects/yag/core/gc.h \
  /home/pranav/Downloads/coding/projects/yag/core/lock.h \
- /home/pranav/Downloads/coding/projects/yag/core/gc.h
+ /home/pranav/Downloads/coding/projects/yag/core/repo.h \
+ /home/pranav/Downloads/coding/projects/yag/core/staging.h \
+ /home/pranav/Downloads/coding/projects/yag/core/sync.h

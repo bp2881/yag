@@ -254,4 +254,33 @@ std::string get_project_name() {
   return name;
 }
 
+void write_reflog(const std::string &action, const std::string &old_ref,
+                  const std::string &new_ref) {
+  fs::path root = find_yag_root();
+  fs::path reflog_path = root / YAG_DIR / "logs" / "HEAD";
+
+  if (!fs::exists(reflog_path.parent_path())) {
+    fs::create_directories(reflog_path.parent_path());
+  }
+
+  std::string entry = old_ref + " " + new_ref + " " + action + "\n";
+  std::string existing = "";
+  if (fs::exists(reflog_path)) {
+    existing = utils::read_file(reflog_path);
+  }
+  utils::write_file(reflog_path, existing + entry);
+}
+
+void show_reflog() {
+  fs::path root = find_yag_root();
+  fs::path reflog_path = root / YAG_DIR / "logs" / "HEAD";
+
+  if (!fs::exists(reflog_path)) {
+    std::cout << "No reflog found.\n";
+    return;
+  }
+
+  std::cout << utils::read_file(reflog_path);
+}
+
 } // namespace yag::core

@@ -43,11 +43,22 @@ bool checkout(const std::string &name) {
     return false;
   }
 
+  // ------------------------------------------------------------------
   // Update HEAD
+  // ------------------------------------------------------------------
+  std::string old_branch = get_current_branch();
+  std::string old_commit =
+      utils::read_file(root / ".yag" / "branches" / old_branch);
+
   set_current_branch(name);
 
   // Restore working directory from the branch's latest commit
   std::string commit_id = utils::read_file(branch_file);
+
+  // Write reflog
+  write_reflog("checkout: moving from " + old_branch + " to " + name, old_commit,
+               commit_id);
+
   if (commit_id != "none") {
     Commit c = read_commit(commit_id);
 

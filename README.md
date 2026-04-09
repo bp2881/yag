@@ -6,12 +6,40 @@ A lightweight, hybrid local + centralized version control system written in C++1
 
 - **SSH/SCP sync** — Synchronize your project via pure SSH/SCP. No SMB or shared filesystems required.
 - **Cross-platform** — Supports Linux and Windows (OpenSSH) clients with a Linux-based central repository.
+- **Robust Transfers** — Automatic **retry logic** (3 attempts) and post-transfer **SHA-256 verification** ensure data integrity.
 - **Idempotent push/pull** — Compares branch tips before any file transfer to save bandwidth.
+- **Repository Doctor** — Deep health checks (`yag doctor`) to verify commit chains and object hashing.
+- **Staging & Diff** — Line-by-line diff (`yag diff`) between working directory and staged index.
+- **File Locking** — Prevent concurrent push conflicts with per-file locks (`yag lock`).
+- **Reflog** — Local history of HEAD movements for recovery from accidental branch deletes or checkouts.
+- **Garbage Collection** — Cleanup tool (`yag gc`) to remove orphaned objects and commits.
+- **Protected Branches** — Optional protection for the `main` branch to prevent direct push modifications.
+- **AI Merge Hook** — Placeholder for future AI-assisted conflict resolution.
 - **Deterministic hashing** — Stable commit IDs regardless of filesystem order or operating system.
-- **Conflict detection** — Flags diverged histories with differing file contents to prevent silent overwrites.
-- **Empty commit prevention** — Prevents cluttering history with commits that contain no changes.
 - **Branching** — Full support for creating, switching, and listing branches.
-- **Self-contained** — Zero external dependencies for core logic (includes native SHA-256).
+
+## Command Reference
+
+| Command | Description |
+| :--- | :--- |
+| `yag init [name]` | Initialize a new repository |
+| `yag add <file\|.>` | Stage file(s) for commit |
+| `yag status` | Show working tree status |
+| `yag diff` | Show changes between working dir and index |
+| `yag commit "msg"` | Commit staged snapshot |
+| `yag branch [name]` | List or create branches |
+| `yag checkout <name>` | Switch to a branch |
+| `yag log` | Show commit history |
+| `yag reflog` | Show local HEAD movement history |
+| `yag doctor` | Check repository health/integrity |
+| `yag lock <file>` | Lock a file to prevent pushes |
+| `yag unlock <file>` | Unlock a file |
+| `yag locks` | Show all active file locks |
+| `yag gc` | Clean unreachable objects/commits |
+| `yag push` | Push to central repository (SSH) |
+| `yag pull` | Pull from central repository (SSH) |
+| `yag remote set <spec>` | Set remote server (user@host) |
+| `yag remote show` | Show current remote config |
 
 ---
 
