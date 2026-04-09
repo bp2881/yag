@@ -201,6 +201,102 @@ core/commit.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/commit.cpp.s
 .PHONY : core/commit.cpp.s
 
+core/diff.o: core/diff.cpp.o
+.PHONY : core/diff.o
+
+# target to build an object file
+core/diff.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/diff.cpp.o
+.PHONY : core/diff.cpp.o
+
+core/diff.i: core/diff.cpp.i
+.PHONY : core/diff.i
+
+# target to preprocess a source file
+core/diff.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/diff.cpp.i
+.PHONY : core/diff.cpp.i
+
+core/diff.s: core/diff.cpp.s
+.PHONY : core/diff.s
+
+# target to generate assembly for a file
+core/diff.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/diff.cpp.s
+.PHONY : core/diff.cpp.s
+
+core/doctor.o: core/doctor.cpp.o
+.PHONY : core/doctor.o
+
+# target to build an object file
+core/doctor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/doctor.cpp.o
+.PHONY : core/doctor.cpp.o
+
+core/doctor.i: core/doctor.cpp.i
+.PHONY : core/doctor.i
+
+# target to preprocess a source file
+core/doctor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/doctor.cpp.i
+.PHONY : core/doctor.cpp.i
+
+core/doctor.s: core/doctor.cpp.s
+.PHONY : core/doctor.s
+
+# target to generate assembly for a file
+core/doctor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/doctor.cpp.s
+.PHONY : core/doctor.cpp.s
+
+core/gc.o: core/gc.cpp.o
+.PHONY : core/gc.o
+
+# target to build an object file
+core/gc.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/gc.cpp.o
+.PHONY : core/gc.cpp.o
+
+core/gc.i: core/gc.cpp.i
+.PHONY : core/gc.i
+
+# target to preprocess a source file
+core/gc.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/gc.cpp.i
+.PHONY : core/gc.cpp.i
+
+core/gc.s: core/gc.cpp.s
+.PHONY : core/gc.s
+
+# target to generate assembly for a file
+core/gc.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/gc.cpp.s
+.PHONY : core/gc.cpp.s
+
+core/lock.o: core/lock.cpp.o
+.PHONY : core/lock.o
+
+# target to build an object file
+core/lock.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/lock.cpp.o
+.PHONY : core/lock.cpp.o
+
+core/lock.i: core/lock.cpp.i
+.PHONY : core/lock.i
+
+# target to preprocess a source file
+core/lock.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/lock.cpp.i
+.PHONY : core/lock.cpp.i
+
+core/lock.s: core/lock.cpp.s
+.PHONY : core/lock.s
+
+# target to generate assembly for a file
+core/lock.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yag.dir/build.make CMakeFiles/yag.dir/core/lock.cpp.s
+.PHONY : core/lock.cpp.s
+
 core/repo.o: core/repo.cpp.o
 .PHONY : core/repo.o
 
@@ -363,6 +459,18 @@ help:
 	@echo "... core/commit.o"
 	@echo "... core/commit.i"
 	@echo "... core/commit.s"
+	@echo "... core/diff.o"
+	@echo "... core/diff.i"
+	@echo "... core/diff.s"
+	@echo "... core/doctor.o"
+	@echo "... core/doctor.i"
+	@echo "... core/doctor.s"
+	@echo "... core/gc.o"
+	@echo "... core/gc.i"
+	@echo "... core/gc.s"
+	@echo "... core/lock.o"
+	@echo "... core/lock.i"
+	@echo "... core/lock.s"
 	@echo "... core/repo.o"
 	@echo "... core/repo.i"
 	@echo "... core/repo.s"

@@ -181,4 +181,8 @@ CMakeFiles/yag.dir/cli/main.cpp.o: \
  /usr/include/c++/15.2.1/bits/vector.tcc \
  /home/pranav/Downloads/coding/projects/yag/core/branch.h \
  /home/pranav/Downloads/coding/projects/yag/core/sync.h \
- /home/pranav/Downloads/coding/projects/yag/core/staging.h
+ /home/pranav/Downloads/coding/projects/yag/core/staging.h \
+ /home/pranav/Downloads/coding/projects/yag/core/diff.h \
+ /home/pranav/Downloads/coding/projects/yag/core/doctor.h \
+ /home/pranav/Downloads/coding/projects/yag/core/lock.h \
+ /home/pranav/Downloads/coding/projects/yag/core/gc.h
