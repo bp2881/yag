@@ -1,53 +1,52 @@
-# YAG — Yet Another Git
+# YAG
 
-A lightweight, hybrid local + centralized version control system written in C++17. Syncs project history between machines over **SSH/SCP** — works across Linux↔Linux and Windows→Linux environments.
+A lightweight version control system written in C++17. YAG combines local version control with a central repository and uses **SSH/SCP** to sync repositories between machines. It works across Linux and Windows clients without requiring any server-side installation.
 
 ## Features
 
-- **SSH/SCP sync** — Synchronize your project via pure SSH/SCP. No SMB or shared filesystems required.
-- **Cross-platform** — Supports Linux and Windows (OpenSSH) clients with a Linux-based central repository.
-- **Robust Transfers** — Automatic **retry logic** (3 attempts) and post-transfer **SHA-256 verification** ensure data integrity.
-- **Idempotent push/pull** — Compares branch tips before any file transfer to save bandwidth.
-- **Repository Doctor** — Deep health checks (`yag doctor`) to verify commit chains and object hashing.
-- **Staging & Diff** — Line-by-line diff (`yag diff`) between working directory and staged index.
-- **File Locking** — Prevent concurrent push conflicts with per-file locks (`yag lock`).
-- **Reflog** — Local history of HEAD movements for recovery from accidental branch deletes or checkouts.
-- **Garbage Collection** — Cleanup tool (`yag gc`) to remove orphaned objects and commits.
-- **Protected Branches** — Optional protection for the `main` branch to prevent direct push modifications.
-- **AI Merge Hook** — Placeholder for future AI-assisted conflict resolution.
-- **Deterministic hashing** — Stable commit IDs regardless of filesystem order or operating system.
-- **Branching** — Full support for creating, switching, and listing branches.
+* Sync repositories over **SSH/SCP**.
+* Works on Linux and Windows (using OpenSSH) with a Linux-based central repository.
+* Retries failed transfers automatically (up to 3 times) and verifies every transfer using **SHA-256** hashes.
+* Avoids unnecessary transfers by comparing branch heads before pushing or pulling.
+* `yag doctor` checks repository integrity by validating commit history and object hashes.
+* View line-by-line differences between the working directory and staging area with `yag diff`.
+* Lock files to avoid conflicting pushes.
+* Recover previous HEAD states using `yag reflog`.
+* Remove unreachable objects and commits with `yag gc`.
+* Optional protection for the `main` branch.
+* Placeholder support for future AI-assisted merge conflict resolution.
+* Deterministic hashing produces the same commit IDs across operating systems.
+* Create, switch, and manage multiple branches.
 
-## Command Reference
+## Commands
 
-| Command | Description |
-| :--- | :--- |
-| `yag init [name]` | Initialize a new repository |
-| `yag add <file\|.>` | Stage file(s) for commit |
-| `yag status` | Show working tree status |
-| `yag diff` | Show changes between working dir and index |
-| `yag commit "msg"` | Commit staged snapshot |
-| `yag branch [name]` | List or create branches |
-| `yag checkout <name>` | Switch to a branch |
-| `yag log` | Show commit history |
-| `yag reflog` | Show local HEAD movement history |
-| `yag doctor` | Check repository health/integrity |
-| `yag lock <file>` | Lock a file to prevent pushes |
-| `yag unlock <file>` | Unlock a file |
-| `yag locks` | Show all active file locks |
-| `yag gc` | Clean unreachable objects/commits |
-| `yag push` | Push to central repository (SSH) |
-| `yag pull` | Pull from central repository (SSH) |
-| `yag remote set <spec>` | Set remote server (user@host) |
-| `yag remote show` | Show current remote config |
+| Command                 | Description                                 |
+| :---------------------- | :------------------------------------------ |
+| `yag init [name]`       | Create a new repository                     |
+| `yag add <file\|.>`     | Stage files                                 |
+| `yag status`            | Show repository status                      |
+| `yag diff`              | Compare working directory with staged files |
+| `yag commit "msg"`      | Create a commit                             |
+| `yag branch [name]`     | List or create branches                     |
+| `yag checkout <name>`   | Switch branches                             |
+| `yag log`               | Show commit history                         |
+| `yag reflog`            | Show HEAD history                           |
+| `yag doctor`            | Verify repository integrity                 |
+| `yag lock <file>`       | Lock a file                                 |
+| `yag unlock <file>`     | Unlock a file                               |
+| `yag locks`             | List active locks                           |
+| `yag gc`                | Remove unreachable objects                  |
+| `yag push`              | Push changes to the remote repository       |
+| `yag pull`              | Pull changes from the remote repository     |
+| `yag remote set <spec>` | Configure the remote server                 |
+| `yag remote show`       | Display the current remote configuration    |
 
 ---
 
-## Setup Instructions
+## Building
 
-### 1. Build from Source
+### Linux
 
-#### Linux
 ```bash
 git clone <repo-url> yag
 cd yag
@@ -57,7 +56,8 @@ make -j$(nproc)
 sudo cp yag /usr/local/bin/
 ```
 
-#### Windows (PowerShell)
+### Windows (PowerShell)
+
 ```powershell
 git clone <repo-url> yag
 cd yag
@@ -65,47 +65,47 @@ mkdir build ; cd build
 cmake ..
 cmake --build . --config Release
 ```
-*Add `build\Release\yag.exe` to your PATH.*
 
-### 2. Initialize and Commit
+Add `build\Release\yag.exe` to your PATH.
+
+---
+
+## Getting Started
+
+Create a project and initialize a repository:
 
 ```bash
-# Create a new project
 mkdir my-project && cd my-project
-
-# Initialize YAG
 yag init my-project
 
-# Add and commit files
 echo "Hello, YAG!" > hello.txt
 yag add .
 yag commit "Initial commit"
 ```
 
-### 3. Remote Configuration
+---
 
-YAG requires **key-based SSH authentication**. Ensure you can SSH into your server without a password prompt.
+## Setting up a Remote
+
+YAG uses SSH key authentication. Make sure you can connect to your server without entering a password.
 
 ```bash
-# Connect to your remote server
 yag remote set user@yourserver.com
-
-# Push your history to the central repository
 yag push
 ```
 
-### 4. Syncing on Another Machine
+---
+
+## Using the Repository on Another Machine
 
 ```bash
-# Initialize the project locally with the SAME name
 mkdir my-project && cd my-project
 yag init my-project
 
-# Set the same remote and pull
 yag remote set user@yourserver.com
 yag pull
 ```
 
 ---
 
-*The central repository is stored at `~/yag-central/projects/<project_name>/` on the server by default. No server-side YAG installation is required.*
+The central repository is stored in `~/yag-central/projects/<project_name>/` by default. No additional software needs to be installed on the server.
